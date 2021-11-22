@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="Content-Security-Policy"
-      content="default-src 'self' data: gap: ws: 'unsafe-inline' https://cdn.jsdelivr.net https://webrtc.github.io ;">
+        content="default-src 'self' data: gap: ws: 'unsafe-inline' https://cdn.jsdelivr.net https://webrtc.github.io ;">
     <title>webRTC streaming and capture test</title>
 </head>
 
@@ -26,51 +27,53 @@
     <script src="https://cdn.jsdelivr.net/npm/ovenplayer/dist/ovenplayer.js"></script>
     <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
 
-<script>  // Initialize OvenPlayer
-    const player = OvenPlayer.create(id = "player_id", {
-      sources: [
-          {
-              label: 'marinestream',
-              // Set the type to 'webrtc'
-              type: 'webrtc',
-              // Set the file to WebRTC Signaling URL with OvenMediaEngine 
-              file: 'ws://localhost:3333/app/stream'
-          }
-      ]
-  });
-  
-const screenshotButton = document.querySelector("#screenshot-button");
-const img = document.querySelector("#screenshot-img");
-const videoWrapper = document.getElementsByClassName("op-media-element-container");
+    <script>  // Initialize OvenPlayer
+        const player = OvenPlayer.create(id = "player_id", {
+            sources: [
+                {
+                    label: 'marinestream',
+                    // Set the type to 'webrtc'
+                    type: 'webrtc',
+                    // Set the file to WebRTC Signaling URL with OvenMediaEngine 
+                    file: 'ws://localhost:3333/app/stream'
+                }
+            ]
+        });
 
-const canvas = document.createElement("canvas");
+        const screenshotButton = document.querySelector("#screenshot-button");
+        const img = document.querySelector("#screenshot-img");
+        const videoWrapper = document.getElementsByClassName("op-media-element-container");
+        const video = document.getElementById('player_id').getElementsByTagName('video')
 
-const getVideo = (className) => {
-    const videoWrapper = document.getElementsByClassName(className);
-    const wrapperFound = videoWrapper !== undefined && videoWrapper.length > 0;
-    if (wrapperFound === false) {
-        console.log("Wrapper not found", { videoWrapper });
-        return undefined;
-    }
-    const videoElementFound = videoWrapper[0].children?.length > 0;
-    if (!videoElementFound) {
-        console.log("Video Element not found", { videoWrapper: videoWrapper });
-        return undefined;
-    }
-    return videoWrapper[0].children[0];
-};
-screenshotButton.onclick = function () {
+        const canvas = document.createElement("canvas");
 
-    const video = getVideo("op-media-element-container")
+        const getVideo = (className) => {
+            const videoWrapper = document.getElementsByClassName(className);
+            const wrapperFound = videoWrapper !== undefined && videoWrapper.length > 0;
+            if (wrapperFound === false) { 
+                console.log("Wrapper not found", { videoWrapper });
+                return undefined;
+            }
+            const videoElementFound = videoWrapper[0].children?.length > 0;
+            if (!videoElementFound) {
+                console.log("Video Element not found", { videoWrapper: videoWrapper });
+                return undefined;
+            }
+            return videoWrapper[0].children[0];
+        };
+        screenshotButton.onclick = function () {
 
-    console.log("video dom elment", { video, videoWrapper, width: video.videoWidth, height: video.videoHeight })
+            const video = getVideo("op-media-element-container")
 
-    canvas.width = video.videoWidth;
-    canvas.height = video.videoHeight;
-    canvas.getContext("2d").drawImage(video, 0, 0, video.videoWidth, video.videoHeight);
+            console.log("video dom elment", { video, videoWrapper, width: video.videoWidth, height: video.videoHeight })
 
-    img.src = canvas.toDataURL("image/webp");
-};
-</script>
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            canvas.getContext("2d").drawImage(video, 0, 0, video.videoWidth, video.videoHeight);
+
+            img.src = canvas.toDataURL("image/webp");
+        };
+    </script>
 </body>
+
 </html>
